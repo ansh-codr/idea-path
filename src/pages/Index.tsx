@@ -9,6 +9,7 @@ import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import GeneratorSection from "@/components/GeneratorSection";
 import { ResultsSection, AIResults } from "@/components/ResultsSection";
+import ResultsVisualization from "@/components/ResultsVisualization";
 import FinalCTA from "@/components/FinalCTA";
 import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -28,10 +29,29 @@ const iconMap: Record<string, React.ReactNode> = {
   risk: <Shield className="w-4 h-4" strokeWidth={1.5} />,
 };
 
+// Full API response type for visualization data
+interface FullAPIResponse {
+  results: AIResults;
+  decisionSupport?: {
+    pros?: string[];
+    cons?: string[];
+    revenueSimulation?: {
+      year1RevenueMin: number;
+      year1RevenueMax: number;
+      year1ProfitMin: number;
+      year1ProfitMax: number;
+      currency?: string;
+    };
+    budgetSuitability?: string;
+    easeOfExecution?: string;
+  };
+}
+
 const Index = () => {
   const { t, language } = useLanguage();
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<AIResults | null>(null);
+  const [fullResponse, setFullResponse] = useState<FullAPIResponse | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   const handleGenerate = async (formData: any) => {
@@ -76,6 +96,12 @@ const Index = () => {
       };
 
       setResults(transformedResults);
+      
+      // Store full response for visualization
+      setFullResponse({
+        results: transformedResults,
+        decisionSupport: data.decisionSupport,
+      });
 
       toast({
         title: "Ideas Generated!",
@@ -102,6 +128,7 @@ const Index = () => {
 
   const handleRestart = () => {
     setResults(null);
+    setFullResponse(null);
     const generatorSection = document.getElementById("generator");
     if (generatorSection) {
       generatorSection.scrollIntoView({ behavior: "smooth" });
@@ -133,6 +160,25 @@ const Index = () => {
       <HeroSection />
       <GeneratorSection onGenerate={handleGenerate} isGenerating={isGenerating} />
       <ResultsSection results={results} />
+      
+      {/* Visualization Section */}
+      {fullResponse && (
+        <section className="py-16 md:py-24 relative">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <ResultsVisualization
+              feasibilityScores={fullResponse.results.feasibilityScores.map(score => ({
+                label: score.label,
+                value: score.value,
+                description: score.description,
+              }))}
+              roadmap={fullResponse.results.roadmap}
+              revenueSimulation={fullResponse.decisionSupport?.revenueSimulation}
+              budgetSuitability={fullResponse.decisionSupport?.budgetSuitability}
+            />
+          </div>
+        </section>
+      )}
+      
       <FinalCTA hasResults={!!results} onRestart={handleRestart} />
 
       {/* Footer */}
