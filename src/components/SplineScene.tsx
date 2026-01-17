@@ -95,11 +95,11 @@ const SplineScene = ({ className = "" }: SplineSceneProps) => {
         }
       `}</style>
       
-      {/* Lighter overlay for better Spline visibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background pointer-events-none" />
+      {/* Light gradient overlay for text readability on light theme */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background pointer-events-none" />
       
-      {/* Subtle intelligence glow from top */}
-      <div className="absolute inset-0 hero-gradient opacity-40 pointer-events-none" />
+      {/* Subtle glow from top */}
+      <div className="absolute inset-0 hero-gradient opacity-50 pointer-events-none" />
     </div>
   );
 };

@@ -1,30 +1,30 @@
 import { Globe } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { useLanguage, Language, languageNames } from "@/contexts/LanguageContext";
 
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
 
+  const languages: Language[] = ["en", "hi"];
+
   return (
-    <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-      <SelectTrigger className="w-auto gap-2 bg-secondary/50 border-border/50 h-9 px-3">
-        <Globe className="w-4 h-4 text-muted-foreground" />
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        {(Object.keys(languageNames) as Language[]).map((lang) => (
-          <SelectItem key={lang} value={lang}>
-            {languageNames[lang]}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex items-center gap-1 bg-secondary rounded-full p-1">
+      {languages.map((lang) => (
+        <Button
+          key={lang}
+          variant={language === lang ? "default" : "ghost"}
+          size="sm"
+          onClick={() => setLanguage(lang)}
+          className={`rounded-full px-4 h-8 text-sm font-medium ${
+            language === lang
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+          }`}
+        >
+          {lang === "en" ? "English" : "हिंदी"}
+        </Button>
+      ))}
+    </div>
   );
 };
 
