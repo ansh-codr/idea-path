@@ -117,32 +117,10 @@ const Index = () => {
         }}
       />
 
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-40 py-4 bg-background/80 backdrop-blur-sm border-b border-border/50">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-forest flex items-center justify-center text-white font-serif text-sm font-semibold">
-                IF
-              </div>
-              <div>
-                <div className="font-serif text-xl text-foreground">
-                  IdeaForge
-                </div>
-                <div className="text-xs text-muted-foreground tracking-wide">
-                  Skills → Business ideas
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side */}
-            <div className="flex items-center gap-4">
-              <LanguageSwitcher />
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Language Switcher - Fixed position */}
+      <div className="fixed top-4 right-4 z-40">
+        <LanguageSwitcher />
+      </div>
       
       {/* Chatbot */}
       <ChatbotSidebar />
