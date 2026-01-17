@@ -70,23 +70,21 @@ const HeroSection = () => {
               {t("hero.subheadline")}
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTA Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.6 }}
-              className="flex flex-wrap gap-4 mb-8"
+              className="mb-8"
             >
               <Button
                 variant="default"
                 size="lg"
                 onClick={scrollToGenerator}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8"
               >
                 {t("hero.cta")}
-              </Button>
-              <Button variant="outline" size="lg" className="font-medium px-6">
-                Login to save ideas
+                <ArrowDown className="w-4 h-4 ml-2" />
               </Button>
             </motion.div>
 
@@ -145,8 +143,8 @@ const HeroSection = () => {
                 {[
                   "Simple form with skills, location, budget",
                   "Hindi/English toggle for comfort",
-                  "Save and revisit when logged in",
                   "Lightweight business plan on demand",
+                  "No login required to get started",
                 ].map((item, index) => (
                   <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
