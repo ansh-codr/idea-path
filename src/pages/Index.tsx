@@ -146,13 +146,8 @@ const Index = () => {
         }}
       />
 
-      {/* Header with logo */}
+      {/* Header with logo and language switcher */}
       <Header />
-      
-      {/* Language Switcher - Fixed position */}
-      <div className="fixed top-4 right-4 z-40">
-        <LanguageSwitcher />
-      </div>
       
       {/* Chatbot */}
       <ChatbotSidebar />
