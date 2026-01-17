@@ -178,7 +178,7 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
             <div className="pt-4">
               <Button
                 type="submit"
-                className="w-full bg-forest hover:bg-forest/90 text-white rounded-full uppercase tracking-widest text-sm font-medium py-6 transition-all duration-300 hover:-translate-y-0.5"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full uppercase tracking-widest text-sm font-medium h-14 transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
                 disabled={!isFormValid || isGenerating}
               >
                 {isGenerating ? (

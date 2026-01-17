@@ -1,5 +1,6 @@
 import udhbhavLogo from "@/assets/udhbhav-logo.jpeg";
 import AuthButton from "./AuthButton";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Header = () => {
   return (
@@ -18,9 +19,15 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Auth Button */}
-        <div className="bg-black/80 backdrop-blur-md px-3 py-2 rounded-full border border-white/10 shadow-lg">
-          <AuthButton />
+        {/* Right side controls */}
+        <div className="flex items-center gap-3">
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+          
+          {/* Auth Button */}
+          <div className="bg-black/80 backdrop-blur-md px-3 py-2 rounded-full border border-white/10 shadow-lg">
+            <AuthButton />
+          </div>
         </div>
       </div>
     </header>
