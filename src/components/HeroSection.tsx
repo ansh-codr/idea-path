@@ -26,7 +26,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
         >
           <Button variant="intelligence" size="xl" onClick={scrollToGenerator} className="group shadow-xl">
             Start Building
