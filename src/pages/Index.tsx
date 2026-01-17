@@ -10,6 +10,7 @@ import HeroSection from "@/components/HeroSection";
 import GeneratorSection from "@/components/GeneratorSection";
 import { ResultsSection, AIResults } from "@/components/ResultsSection";
 import ResultsVisualization from "@/components/ResultsVisualization";
+import IdeasComparison from "@/components/IdeasComparison";
 import FinalCTA from "@/components/FinalCTA";
 import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -29,9 +30,30 @@ const iconMap: Record<string, React.ReactNode> = {
   risk: <Shield className="w-4 h-4" strokeWidth={1.5} />,
 };
 
+// Idea type with full details
+interface IdeaDetail {
+  title: string;
+  description: string;
+  whyItFits: string;
+  localAdaptation?: string;
+  budgetRange?: { min: number; max: number; currency: string };
+  riskLevel?: "low" | "medium" | "high";
+  riskFactors?: string[];
+  competitors?: { name: string; type: string; threat: string }[];
+  revenueProjection?: {
+    customersNeeded: number;
+    avgRevenuePerCustomer: number;
+    monthlyRevenue: number;
+    yearlyRevenue: number;
+    breakEvenMonths: number;
+    assumptions: string;
+  };
+}
+
 // Full API response type for visualization data
 interface FullAPIResponse {
   results: AIResults;
+  ideas?: IdeaDetail[];
   decisionSupport?: {
     pros?: string[];
     cons?: string[];
@@ -41,6 +63,11 @@ interface FullAPIResponse {
       year1ProfitMin: number;
       year1ProfitMax: number;
       currency?: string;
+      customerScenarios?: {
+        customers: number;
+        monthlyRevenue: number;
+        yearlyRevenue: number;
+      }[];
     };
     budgetSuitability?: string;
     easeOfExecution?: string;
@@ -131,9 +158,10 @@ const Index = () => {
 
       setResults(transformedResults);
       
-      // Store full response for visualization
+      // Store full response for visualization (including ideas with details)
       setFullResponse({
         results: transformedResults,
+        ideas: data.ideas,
         decisionSupport: data.decisionSupport,
       });
 
@@ -204,6 +232,14 @@ const Index = () => {
       <HeroSection />
       <GeneratorSection onGenerate={handleGenerate} isGenerating={isGenerating} />
       <ResultsSection results={results} />
+      
+      {/* Top 3 Ideas Comparison */}
+      {fullResponse?.ideas && fullResponse.ideas.length > 0 && (
+        <IdeasComparison 
+          ideas={fullResponse.ideas}
+          customerScenarios={fullResponse.decisionSupport?.revenueSimulation?.customerScenarios}
+        />
+      )}
       
       {/* Visualization Section */}
       {fullResponse && (

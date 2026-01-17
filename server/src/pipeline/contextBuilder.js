@@ -352,33 +352,53 @@ AUDIENCE INSIGHTS:
 - Price Sensitivity: ${audienceInsights.pricesSensitivity}
 
 REQUIREMENTS:
-1. Generate 3-5 realistic business ideas that match this profile
-2. For each idea, explain why it fits the user's situation
-3. Include local adaptation notes for each idea
-4. Generate a primary recommendation with:
-   - Detailed description
-   - Why it fits the user
-   - 4 feasibility scores (market, execution, capital, risk) as 0-100
-   - 4-phase roadmap with timeframes
-   - A concise pitch summary
-5. Include decision support with pros, cons, risks, and revenue estimates
-6. All revenue estimates should be RANGES, not exact figures
-7. Label all projections as estimates
+1. Generate exactly 3 realistic business ideas that match this profile
+2. For each idea provide: title, description, why it fits, budget needed, risk level, competitors, and revenue projection
+3. For the primary recommendation, include detailed feasibility analysis
+4. All revenue estimates MUST be based on realistic customer counts
+5. Label all projections as estimates with clear assumptions
 
 Return your response as valid JSON following this exact schema:
 {
   "results": {
-    "businessIdea": { "title": string, "description": string, "whyItFits": string },
+    "businessIdea": { 
+      "title": string, 
+      "description": string, 
+      "whyItFits": string 
+    },
     "feasibilityScores": [
-      { "label": string, "value": number (0-100), "iconKey": "market"|"execution"|"capital"|"risk", "description": string }
+      { "label": "Market Demand", "value": number (0-100), "iconKey": "market", "description": string },
+      { "label": "Ease of Execution", "value": number (0-100), "iconKey": "execution", "description": string },
+      { "label": "Capital Efficiency", "value": number (0-100), "iconKey": "capital", "description": string },
+      { "label": "Risk Level", "value": number (0-100), "iconKey": "risk", "description": string (higher = safer) }
     ],
     "roadmap": [
-      { "phase": "Phase 1"|"Phase 2"|"Phase 3"|"Phase 4", "title": string, "description": string, "timeframe": string }
+      { "phase": "Phase 1", "title": string, "description": string, "timeframe": string },
+      { "phase": "Phase 2", "title": string, "description": string, "timeframe": string },
+      { "phase": "Phase 3", "title": string, "description": string, "timeframe": string },
+      { "phase": "Phase 4", "title": string, "description": string, "timeframe": string }
     ],
     "pitchSummary": string
   },
   "ideas": [
-    { "title": string, "description": string, "whyItFits": string, "localAdaptation": string }
+    { 
+      "title": string, 
+      "description": string, 
+      "whyItFits": string, 
+      "localAdaptation": string,
+      "budgetRange": { "min": number, "max": number, "currency": "USD" },
+      "riskLevel": "low" | "medium" | "high",
+      "riskFactors": [string],
+      "competitors": [{ "name": string, "type": "direct" | "indirect", "threat": "low" | "medium" | "high" }],
+      "revenueProjection": {
+        "customersNeeded": number,
+        "avgRevenuePerCustomer": number,
+        "monthlyRevenue": number,
+        "yearlyRevenue": number,
+        "breakEvenMonths": number,
+        "assumptions": string
+      }
+    }
   ],
   "decisionSupport": {
     "pros": [string],
@@ -392,11 +412,17 @@ Return your response as valid JSON following this exact schema:
       "year1ProfitMin": number,
       "year1ProfitMax": number,
       "currency": "USD",
+      "customerScenarios": [
+        { "customers": 10, "monthlyRevenue": number, "yearlyRevenue": number },
+        { "customers": 25, "monthlyRevenue": number, "yearlyRevenue": number },
+        { "customers": 50, "monthlyRevenue": number, "yearlyRevenue": number },
+        { "customers": 100, "monthlyRevenue": number, "yearlyRevenue": number }
+      ],
       "notes": string
     },
     "explainability": string,
-    "budgetSuitability": "excellent"|"good"|"moderate"|"challenging",
-    "easeOfExecution": "easy"|"moderate"|"challenging"|"difficult"
+    "budgetSuitability": "excellent" | "good" | "moderate" | "challenging",
+    "easeOfExecution": "easy" | "moderate" | "challenging" | "difficult"
   },
   "ethicalSafeguards": {
     "biasChecks": [string],
