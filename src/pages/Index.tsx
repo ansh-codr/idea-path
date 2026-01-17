@@ -7,6 +7,7 @@ import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // Simulated AI response - in production this would come from backend
 const generateMockResults = (formData: any): AIResults => {
@@ -110,18 +111,47 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Navigation - minimal */}
-      <nav className="fixed top-0 left-0 right-0 z-50 py-4 bg-background/50 backdrop-blur-sm">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 py-3 bg-background/80 backdrop-blur-md border-b border-border/50">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between">
-            <div className="font-display text-xl font-bold text-foreground">
-              Idea<span className="text-primary">Forge</span>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-muted-foreground hidden sm:block">
-                {t("nav.tagline")}
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
+                IF
               </div>
+              <div>
+                <div className="font-display font-bold text-foreground">
+                  IdeaForge
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Skills → Business ideas
+                </div>
+              </div>
+            </div>
+
+            {/* Center Nav */}
+            <div className="hidden md:flex items-center gap-1">
+              <Button variant="ghost" size="sm" className="rounded-full text-foreground font-medium border border-border">
+                Home
+              </Button>
+              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
+                Start
+              </Button>
+              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
+                Saved Ideas
+              </Button>
+            </div>
+
+            {/* Right Side */}
+            <div className="flex items-center gap-3">
               <LanguageSwitcher />
+              <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
+                Login to save
+              </Button>
+              <Button variant="default" size="sm" className="bg-primary text-primary-foreground">
+                Sign up
+              </Button>
             </div>
           </div>
         </div>
@@ -136,7 +166,7 @@ const Index = () => {
       <FinalCTA hasResults={!!results} onRestart={handleRestart} />
 
       {/* Footer */}
-      <footer className="py-8 border-t border-border/50">
+      <footer className="py-8 border-t border-border">
         <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
           <p>{t("footer.tagline")}</p>
           <p className="mt-2 text-xs">
