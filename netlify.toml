@@ -22,10 +22,9 @@
   status = 200
 
 # API Proxy - redirect /api calls to your Render backend
-# Update this URL after deploying to Render
 [[redirects]]
   from = "/api/*"
-  to = "https://ideaforge-backend.onrender.com/api/:splat"
+  to = "https://idea-path.onrender.com/api/:splat"
   status = 200
   force = true
 
