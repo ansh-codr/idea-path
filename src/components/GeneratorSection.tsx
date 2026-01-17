@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Wand2, Lightbulb, MapPin, Users, Wallet } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface GeneratorFormData {
   skills: string;
@@ -27,6 +28,7 @@ interface GeneratorSectionProps {
 }
 
 const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState<GeneratorFormData>({
     skills: "",
     interests: "",
@@ -61,11 +63,10 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
           className="text-center mb-12"
         >
           <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Tell us about yourself
+            {t("generator.title")}
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Share your background and goals. Our AI will analyze your unique context
-            to generate personalized business directions.
+            {t("generator.subtitle")}
           </p>
         </motion.div>
 
@@ -82,17 +83,17 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
             <div className="space-y-3">
               <Label htmlFor="skills" className="flex items-center gap-2 text-foreground">
                 <Lightbulb className="w-4 h-4 text-primary" />
-                What are your core skills or expertise?
+                {t("generator.skills.label")}
               </Label>
               <Textarea
                 id="skills"
-                placeholder="e.g., I'm good at teaching, have experience in accounting, know how to cook traditional recipes..."
+                placeholder={t("generator.skills.placeholder")}
                 value={formData.skills}
                 onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
                 className="min-h-[80px]"
               />
               <p className="text-xs text-muted-foreground">
-                Include professional skills, hobbies, or anything you do well
+                {t("generator.skills.hint")}
               </p>
             </div>
 
@@ -100,11 +101,11 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
             <div className="space-y-3">
               <Label htmlFor="interests" className="flex items-center gap-2 text-foreground">
                 <Wand2 className="w-4 h-4 text-primary" />
-                What topics or industries interest you?
+                {t("generator.interests.label")}
               </Label>
               <Input
                 id="interests"
-                placeholder="e.g., sustainability, education, local food, technology..."
+                placeholder={t("generator.interests.placeholder")}
                 value={formData.interests}
                 onChange={(e) => setFormData({ ...formData, interests: e.target.value })}
               />
@@ -116,21 +117,21 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
               <div className="space-y-3">
                 <Label htmlFor="budget" className="flex items-center gap-2 text-foreground">
                   <Wallet className="w-4 h-4 text-primary" />
-                  Starting budget
+                  {t("generator.budget.label")}
                 </Label>
                 <Select
                   value={formData.budget}
                   onValueChange={(value) => setFormData({ ...formData, budget: value })}
                 >
                   <SelectTrigger id="budget">
-                    <SelectValue placeholder="Select range" />
+                    <SelectValue placeholder={t("generator.budget.placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="under-1k">Under $1,000</SelectItem>
-                    <SelectItem value="1k-5k">$1,000 - $5,000</SelectItem>
-                    <SelectItem value="5k-20k">$5,000 - $20,000</SelectItem>
-                    <SelectItem value="20k-50k">$20,000 - $50,000</SelectItem>
-                    <SelectItem value="over-50k">Over $50,000</SelectItem>
+                    <SelectItem value="under-1k">{t("generator.budget.under1k")}</SelectItem>
+                    <SelectItem value="1k-5k">{t("generator.budget.1k5k")}</SelectItem>
+                    <SelectItem value="5k-20k">{t("generator.budget.5k20k")}</SelectItem>
+                    <SelectItem value="20k-50k">{t("generator.budget.20k50k")}</SelectItem>
+                    <SelectItem value="over-50k">{t("generator.budget.over50k")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -139,21 +140,21 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
               <div className="space-y-3">
                 <Label htmlFor="location" className="flex items-center gap-2 text-foreground">
                   <MapPin className="w-4 h-4 text-primary" />
-                  Location type
+                  {t("generator.location.label")}
                 </Label>
                 <Select
                   value={formData.locationType}
                   onValueChange={(value) => setFormData({ ...formData, locationType: value })}
                 >
                   <SelectTrigger id="location">
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder={t("generator.location.placeholder")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="urban">Urban / City</SelectItem>
-                    <SelectItem value="suburban">Suburban</SelectItem>
-                    <SelectItem value="semi-urban">Semi-Urban</SelectItem>
-                    <SelectItem value="rural">Rural</SelectItem>
-                    <SelectItem value="remote">Fully Remote</SelectItem>
+                    <SelectItem value="urban">{t("generator.location.urban")}</SelectItem>
+                    <SelectItem value="suburban">{t("generator.location.suburban")}</SelectItem>
+                    <SelectItem value="semi-urban">{t("generator.location.semiurban")}</SelectItem>
+                    <SelectItem value="rural">{t("generator.location.rural")}</SelectItem>
+                    <SelectItem value="remote">{t("generator.location.remote")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -163,16 +164,16 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
             <div className="space-y-3">
               <Label htmlFor="audience" className="flex items-center gap-2 text-foreground">
                 <Users className="w-4 h-4 text-primary" />
-                Who do you want to help or serve?
+                {t("generator.audience.label")}
               </Label>
               <Input
                 id="audience"
-                placeholder="e.g., busy parents, small business owners, students, elderly..."
+                placeholder={t("generator.audience.placeholder")}
                 value={formData.targetAudience}
                 onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
               />
               <p className="text-xs text-muted-foreground">
-                Think about the people whose problems you'd like to solve
+                {t("generator.audience.hint")}
               </p>
             </div>
 
@@ -188,12 +189,12 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
                 {isGenerating ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Analyzing your context...</span>
+                    <span>{t("generator.loading")}</span>
                   </>
                 ) : (
                   <>
                     <Wand2 className="w-5 h-5" />
-                    <span>Generate Business Ideas</span>
+                    <span>{t("generator.submit")}</span>
                   </>
                 )}
               </Button>

@@ -138,9 +138,9 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 border-t border-border/50">
         <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
-          <p>Built with intelligence. Designed for dreamers.</p>
+          <p>{t("footer.tagline")}</p>
           <p className="mt-2 text-xs">
-            IdeaForge © 2026 • AI outputs are suggestions, not guarantees
+            {t("footer.disclaimer")}
           </p>
         </div>
       </footer>

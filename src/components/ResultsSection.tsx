@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Shield, Zap, DollarSign, Target, Lightbulb } from "lucide-react";
+import { TrendingUp, Target, Zap, Lightbulb } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FeasibilityScore {
   label: string;
@@ -74,6 +75,8 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ results }: ResultsSectionProps) => {
+  const { t } = useLanguage();
+
   if (!results) return null;
 
   const containerVariants = {
@@ -102,10 +105,10 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
         {/* Section Header */}
         <motion.div variants={itemVariants} className="text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            Your Personalized <span className="text-gradient-intelligence">Business Direction</span>
+            {t("results.title")} <span className="text-gradient-intelligence">{t("results.title.highlight")}</span>
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Based on your unique context, here's what our AI recommends
+            {t("results.subtitle")}
           </p>
         </motion.div>
 
@@ -120,7 +123,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
                 <Lightbulb className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Recommended Direction</p>
+                <p className="text-sm text-muted-foreground">{t("results.idea.label")}</p>
                 <h3 className="font-display text-xl font-bold text-foreground">
                   {results.businessIdea.title}
                 </h3>
@@ -132,7 +135,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
             </p>
             
             <div className="bg-secondary/50 rounded-xl p-4 border border-border/50">
-              <p className="text-sm text-muted-foreground mb-1">Why this fits you</p>
+              <p className="text-sm text-muted-foreground mb-1">{t("results.idea.whyFits")}</p>
               <p className="text-foreground/80 text-sm">
                 {results.businessIdea.whyItFits}
               </p>
@@ -147,7 +150,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
             <div className="flex items-center gap-2 mb-6">
               <Target className="w-5 h-5 text-primary" />
               <h3 className="font-display font-semibold text-foreground">
-                Feasibility Analysis
+                {t("results.feasibility.title")}
               </h3>
             </div>
             
@@ -158,7 +161,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
             </div>
             
             <p className="text-xs text-muted-foreground mt-6 pt-4 border-t border-border/50">
-              These are AI estimates based on your inputs. Actual results may vary.
+              {t("results.feasibility.disclaimer")}
             </p>
           </motion.div>
         </div>
@@ -172,10 +175,10 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
               </div>
               <div>
                 <h3 className="font-display text-lg font-bold text-foreground">
-                  Execution Roadmap
+                  {t("results.roadmap.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Step-by-step path to launch
+                  {t("results.roadmap.subtitle")}
                 </p>
               </div>
             </div>
@@ -213,7 +216,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
             <div className="flex items-center justify-center gap-2 mb-4">
               <Zap className="w-5 h-5 text-accent" />
               <h3 className="font-display font-semibold text-foreground">
-                Your Quick Pitch
+                {t("results.pitch.title")}
               </h3>
             </div>
             <p className="text-lg text-foreground/90 italic leading-relaxed">
