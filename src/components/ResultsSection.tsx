@@ -15,11 +15,9 @@ interface FeasibilityMeterProps {
 }
 
 const FeasibilityMeter = ({ score, delay = 0 }: FeasibilityMeterProps) => {
-  // Determine color based on score
   const getColorClass = (value: number) => {
-    if (value >= 75) return "from-success to-success/70";
-    if (value >= 50) return "from-primary to-primary/70";
-    if (value >= 25) return "from-warning to-warning/70";
+    if (value >= 75) return "from-sage to-sage/70";
+    if (value >= 50) return "from-terracotta to-terracotta/70";
     return "from-muted-foreground to-muted-foreground/70";
   };
 
@@ -27,12 +25,12 @@ const FeasibilityMeter = ({ score, delay = 0 }: FeasibilityMeterProps) => {
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay, duration: 0.5 }}
+      transition={{ delay, duration: 0.5, ease: "easeOut" }}
       className="space-y-2"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-primary">{score.icon}</span>
+          <span className="text-sage">{score.icon}</span>
           <span className="text-sm font-medium text-foreground">{score.label}</span>
         </div>
         <span className="text-sm font-semibold text-foreground">{score.value}%</span>
@@ -93,9 +91,7 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
   };
 
   return (
-    <section id="results" className="py-24 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
-      
+    <section id="results" className="py-24 md:py-32 relative">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -104,39 +100,39 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
       >
         {/* Section Header */}
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
-            {t("results.title")} <span className="text-gradient-intelligence">{t("results.title.highlight")}</span>
+          <h2 className="font-serif text-4xl sm:text-5xl font-semibold mb-4 text-foreground">
+            {t("results.title")} <span className="italic">{t("results.title.highlight")}</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
             {t("results.subtitle")}
           </p>
         </motion.div>
 
         <div className="max-w-5xl mx-auto grid lg:grid-cols-3 gap-8">
-          {/* Main Idea Card - Takes 2 columns */}
+          {/* Main Idea Card */}
           <motion.div
             variants={itemVariants}
-            className="lg:col-span-2 glass-surface rounded-2xl p-6 sm:p-8"
+            className="lg:col-span-2 glass-surface rounded-3xl p-8"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                <Lightbulb className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-full bg-sage/20 flex items-center justify-center">
+                <Lightbulb className="w-6 h-6 text-sage" strokeWidth={1.5} />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">{t("results.idea.label")}</p>
-                <h3 className="font-display text-xl font-bold text-foreground">
+                <h3 className="font-serif text-xl font-semibold text-foreground">
                   {results.businessIdea.title}
                 </h3>
               </div>
             </div>
             
-            <p className="text-foreground/90 mb-6 leading-relaxed">
+            <p className="text-foreground/90 mb-6 leading-relaxed text-lg">
               {results.businessIdea.description}
             </p>
             
-            <div className="bg-secondary/50 rounded-xl p-4 border border-border/50">
+            <div className="bg-secondary/50 rounded-2xl p-5 border border-border/50">
               <p className="text-sm text-muted-foreground mb-1">{t("results.idea.whyFits")}</p>
-              <p className="text-foreground/80 text-sm">
+              <p className="text-foreground/80">
                 {results.businessIdea.whyItFits}
               </p>
             </div>
@@ -145,11 +141,11 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
           {/* Feasibility Scores Card */}
           <motion.div
             variants={itemVariants}
-            className="glass-surface rounded-2xl p-6"
+            className="glass-surface rounded-3xl p-6"
           >
             <div className="flex items-center gap-2 mb-6">
-              <Target className="w-5 h-5 text-primary" />
-              <h3 className="font-display font-semibold text-foreground">
+              <Target className="w-5 h-5 text-sage" strokeWidth={1.5} />
+              <h3 className="font-serif font-semibold text-foreground">
                 {t("results.feasibility.title")}
               </h3>
             </div>
@@ -168,13 +164,13 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
 
         {/* Roadmap Section */}
         <motion.div variants={itemVariants} className="max-w-5xl mx-auto mt-8">
-          <div className="glass-surface rounded-2xl p-6 sm:p-8">
+          <div className="glass-surface rounded-3xl p-8">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-success" />
+              <div className="w-10 h-10 rounded-full bg-sage/20 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-sage" strokeWidth={1.5} />
               </div>
               <div>
-                <h3 className="font-display text-lg font-bold text-foreground">
+                <h3 className="font-serif text-lg font-semibold text-foreground">
                   {t("results.roadmap.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -183,27 +179,26 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
               </div>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {results.roadmap.map((step, index) => (
                 <motion.div
                   key={step.phase}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
-                  className="relative bg-secondary/30 rounded-xl p-4 border border-border/30"
+                  transition={{ delay: 0.5 + index * 0.1, duration: 0.5, ease: "easeOut" }}
+                  className={`relative bg-secondary/40 rounded-2xl p-5 border border-border/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-medium ${
+                    index % 2 === 1 ? "md:translate-y-4" : ""
+                  }`}
                 >
-                  <div className="text-xs font-medium text-primary mb-2">
+                  <div className="text-xs font-medium text-sage mb-2 uppercase tracking-wide">
                     {step.phase} • {step.timeframe}
                   </div>
-                  <h4 className="font-medium text-foreground text-sm mb-2">
+                  <h4 className="font-serif font-medium text-foreground mb-2">
                     {step.title}
                   </h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {step.description}
                   </p>
-                  {index < results.roadmap.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-2 w-4 h-0.5 bg-border" />
-                  )}
                 </motion.div>
               ))}
             </div>
@@ -212,14 +207,14 @@ const ResultsSection = ({ results }: ResultsSectionProps) => {
 
         {/* Pitch Summary */}
         <motion.div variants={itemVariants} className="max-w-3xl mx-auto mt-8">
-          <div className="glass-surface rounded-2xl p-6 sm:p-8 text-center">
+          <div className="glass-surface rounded-3xl p-8 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <Zap className="w-5 h-5 text-accent" />
-              <h3 className="font-display font-semibold text-foreground">
+              <Zap className="w-5 h-5 text-terracotta" strokeWidth={1.5} />
+              <h3 className="font-serif font-semibold text-foreground">
                 {t("results.pitch.title")}
               </h3>
             </div>
-            <p className="text-lg text-foreground/90 italic leading-relaxed">
+            <p className="text-xl text-foreground/90 font-serif italic leading-relaxed">
               "{results.pitchSummary}"
             </p>
           </div>
