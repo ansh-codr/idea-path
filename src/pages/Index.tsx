@@ -54,13 +54,47 @@ const Index = () => {
   const [fullResponse, setFullResponse] = useState<FullAPIResponse | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
 
+  // Helper function to fetch with timeout and retry
+  const fetchWithRetry = async (url: string, options: RequestInit, retries = 2): Promise<Response> => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 55000); // 55 second timeout
+    
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+      
+      // Retry on timeout or network errors
+      if (retries > 0 && (error.name === 'AbortError' || error.message?.includes('504'))) {
+        console.log(`Retrying... (${retries} attempts left)`);
+        toast({
+          title: "Still generating...",
+          description: "AI is working on your personalized guidance. Please wait.",
+        });
+        return fetchWithRetry(url, options, retries - 1);
+      }
+      throw error;
+    }
+  };
+
   const handleGenerate = async (formData: any) => {
     setIsGenerating(true);
     setResults(null);
 
     try {
-      // Call the REAL IdeaForge API
-      const response = await fetch(`${API_BASE_URL}/generate`, {
+      // Show initial toast for potentially slow response
+      toast({
+        title: "Generating your business ideas...",
+        description: "This may take 30-60 seconds. Our AI is crafting personalized guidance.",
+      });
+
+      // Call the REAL IdeaForge API with retry logic
+      const response = await fetchWithRetry(`${API_BASE_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,11 +141,26 @@ const Index = () => {
         title: "Ideas Generated!",
         description: "Your personalized business guidance is ready.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Generation error:", error);
+      
+      // Provide user-friendly error messages
+      let errorTitle = "Generation failed";
+      let errorDesc = "Please try again in a moment.";
+      
+      if (error.name === 'AbortError' || error.message?.includes('504') || error.message?.includes('timeout')) {
+        errorTitle = "Request timed out";
+        errorDesc = "The AI is taking longer than expected. Please try again - the server may have been waking up.";
+      } else if (error.message?.includes('500')) {
+        errorTitle = "Server error";
+        errorDesc = "Something went wrong on our end. Please try again.";
+      } else if (error.message) {
+        errorDesc = error.message;
+      }
+      
       toast({
-        title: "Generation failed",
-        description: error instanceof Error ? error.message : "Please try again in a moment.",
+        title: errorTitle,
+        description: errorDesc,
         variant: "destructive",
       });
     } finally {
