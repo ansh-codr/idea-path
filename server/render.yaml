@@ -20,11 +20,13 @@ services:
         sync: false  # Set this manually in Render dashboard
       - key: OPENAI_API_KEY
         sync: false  # Set this manually in Render dashboard (secret)
+      - key: GEMINI_API_KEY
+        sync: false  # Set this manually in Render dashboard (secret)
       - key: PRIMARY_AI_PROVIDER
-        value: openai
+        value: gemini
       - key: PRIMARY_AI_MODEL
-        value: gpt-4o-mini
+        value: gemini-2.0-flash
       - key: SECONDARY_AI_PROVIDER
         value: openai
       - key: SECONDARY_AI_MODEL
-        value: gpt-4o
+        value: gpt-4o-mini
