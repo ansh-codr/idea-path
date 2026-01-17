@@ -18,8 +18,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/components/ui/use-toast";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
 
-// API Base URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+// API Base URL - Call Render directly to avoid Netlify's 26s proxy timeout
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://idea-path.onrender.com/api";
 
 // Icon mapping for feasibility scores
 const iconMap: Record<string, React.ReactNode> = {

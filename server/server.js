@@ -65,10 +65,20 @@ import { optionalAuth, requireAuth } from "./src/middleware/auth.js";
 // Initialize Express app
 const app = express();
 
-// CORS configuration
+// CORS configuration - Allow direct calls from frontend
+const allowedOrigins = [
+  "http://localhost:8080",
+  "http://localhost:5173",
+  "https://udhbhavv.netlify.app",
+  "https://idea-path.netlify.app",
+  ...(config.server.corsOrigins || []),
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: config.server.corsOrigins.length ? config.server.corsOrigins : "*",
+    origin: allowedOrigins.length ? allowedOrigins : "*",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -223,11 +233,12 @@ app.post("/api/generate", optionalAuth, async (req, res) => {
     const secondarySystemPrompt = buildSecondarySystemPrompt();
     
     // Orchestrate AI generation
+    // Skip secondary model to speed up response (avoid Netlify timeout)
     const aiResult = await orchestrateAIGeneration({
       primarySystemPrompt,
       userPrompt,
       secondarySystemPrompt,
-      skipSecondary: !aiStatus.secondaryAvailable,
+      skipSecondary: true, // Always skip for faster response
     });
     
     if (!aiResult.success) {
