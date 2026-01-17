@@ -13,13 +13,26 @@ const HeroSection = () => {
   };
   return (
     <section className="relative flex flex-col overflow-hidden">
-      {/* Spline 3D Animation - Full width at top */}
+      {/* Spline 3D Animation - Full width at top with Start Button overlay */}
       <div className="relative w-full h-[50vh] md:h-[60vh]">
         <div className="hidden md:block w-full h-full">
           <SplineScene />
         </div>
         {/* Mobile fallback gradient */}
         <div className="md:hidden absolute inset-0 bg-gradient-to-b from-sage/20 via-background to-background" />
+        
+        {/* Start Building Button - Overlay on Spline */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
+        >
+          <Button variant="intelligence" size="xl" onClick={scrollToGenerator} className="group shadow-xl">
+            Start Building
+            <ArrowDown className="w-5 h-5 transition-transform group-hover:translate-y-1" />
+          </Button>
+        </motion.div>
       </div>
       
       {/* Hero Content - Below Spline */}
@@ -62,24 +75,12 @@ const HeroSection = () => {
             background into actionable startup ideas with confidence.
           </motion.p>
 
-          {/* CTA Button */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ delay: 0.5, duration: 0.6 }}
-          >
-            <Button variant="intelligence" size="xl" onClick={scrollToGenerator} className="group">
-              Start Building
-              <ArrowDown className="w-5 h-5 transition-transform group-hover:translate-y-1" />
-            </Button>
-          </motion.div>
-
           {/* Trust indicator */}
           <motion.p 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ delay: 0.8, duration: 0.6 }} 
-            className="mt-8 text-sm text-muted-foreground/70"
+            className="text-sm text-muted-foreground/70"
           >
             No credit card required • Free to explore • Private & secure
           </motion.p>
