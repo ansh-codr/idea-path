@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, RefreshCw } from "lucide-react";
+import { Check, RefreshCw, Download, Share2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "@/hooks/use-toast";
 
 interface FinalCTAProps {
   hasResults: boolean;
@@ -12,6 +13,26 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
   const { t } = useLanguage();
 
   if (!hasResults) return null;
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: "IdeaForge - My Business Idea",
+        text: "Check out this business idea I generated with IdeaForge!",
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Share this page with others.",
+      });
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const features = [
     t("cta.features.ai"),
@@ -24,8 +45,7 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
     <section className="py-24 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/20 blur-[120px] rounded-full" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
       </div>
       
       <motion.div
@@ -41,7 +61,7 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
             <span className="text-sm text-success">{t("cta.complete")}</span>
           </div>
 
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-foreground">
             {t("cta.title")}
           </h2>
           
@@ -50,18 +70,28 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="intelligence" size="lg" className="group">
-              {t("cta.save")}
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            <Button 
+              variant="default" 
+              size="lg" 
+              onClick={handlePrint}
+              className="bg-primary text-primary-foreground"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download as PDF
             </Button>
             
-            <Button variant="outline" size="lg" onClick={onRestart}>
-              <RefreshCw className="w-4 h-4" />
+            <Button variant="outline" size="lg" onClick={handleShare}>
+              <Share2 className="w-4 h-4 mr-2" />
+              Share Results
+            </Button>
+            
+            <Button variant="ghost" size="lg" onClick={onRestart}>
+              <RefreshCw className="w-4 h-4 mr-2" />
               {t("cta.restart")}
             </Button>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-border/50">
+          <div className="mt-12 pt-8 border-t border-border">
             <p className="text-sm text-muted-foreground mb-4">
               {t("cta.features.title")}
             </p>

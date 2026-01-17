@@ -7,7 +7,6 @@ import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 // Simulated AI response - in production this would come from backend
 const generateMockResults = (formData: any): AIResults => {
@@ -109,6 +108,13 @@ const Index = () => {
     }
   };
 
+  const scrollToGenerator = () => {
+    const generatorSection = document.getElementById("generator");
+    if (generatorSection) {
+      generatorSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <main className="min-h-screen bg-background">
       {/* Navigation */}
@@ -130,28 +136,9 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Center Nav */}
-            <div className="hidden md:flex items-center gap-1">
-              <Button variant="ghost" size="sm" className="rounded-full text-foreground font-medium border border-border">
-                Home
-              </Button>
-              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
-                Start
-              </Button>
-              <Button variant="ghost" size="sm" className="rounded-full text-muted-foreground">
-                Saved Ideas
-              </Button>
-            </div>
-
             {/* Right Side */}
             <div className="flex items-center gap-3">
               <LanguageSwitcher />
-              <Button variant="ghost" size="sm" className="hidden sm:flex text-muted-foreground">
-                Login to save
-              </Button>
-              <Button variant="default" size="sm" className="bg-primary text-primary-foreground">
-                Sign up
-              </Button>
             </div>
           </div>
         </div>
