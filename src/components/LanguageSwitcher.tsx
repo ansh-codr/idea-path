@@ -1,6 +1,5 @@
-import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLanguage, Language, languageNames } from "@/contexts/LanguageContext";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
@@ -8,16 +7,16 @@ const LanguageSwitcher = () => {
   const languages: Language[] = ["en", "hi"];
 
   return (
-    <div className="flex items-center gap-1 bg-secondary rounded-full p-1">
+    <div className="flex items-center gap-1 bg-secondary/60 rounded-full p-1 border border-border/50">
       {languages.map((lang) => (
         <Button
           key={lang}
-          variant={language === lang ? "default" : "ghost"}
+          variant="ghost"
           size="sm"
           onClick={() => setLanguage(lang)}
-          className={`rounded-full px-4 h-8 text-sm font-medium ${
+          className={`rounded-full px-4 h-8 text-sm font-medium transition-all duration-300 ${
             language === lang
-              ? "bg-primary text-primary-foreground shadow-sm"
+              ? "bg-forest text-white shadow-soft"
               : "text-muted-foreground hover:text-foreground hover:bg-transparent"
           }`}
         >

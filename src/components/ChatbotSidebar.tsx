@@ -38,14 +38,13 @@ const ChatbotSidebar = () => {
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response (replace with actual API call when backend is enabled)
     setTimeout(() => {
       const responses = [
         "That's a great question! Based on your interests, I'd suggest starting with market research in your local area.",
         "Many successful entrepreneurs started exactly where you are. The key is to validate your idea with real potential customers.",
         "Consider starting small with a minimal viable product (MVP) to test your concept before investing heavily.",
         "Your skills could translate well into several business models. Would you like me to explore some options?",
-        "Location-based businesses often have an advantage in rural areas due to less competition. Have you considered this?",
+        "Location-based businesses often have an advantage in rural areas due to less competition.",
       ];
       
       const assistantMessage: Message = {
@@ -74,11 +73,11 @@ const ChatbotSidebar = () => {
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: "spring", stiffness: 200 }}
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center ${isOpen ? "hidden" : ""}`}
+        className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-forest text-white shadow-large hover:shadow-xl transition-all duration-500 hover:-translate-y-1 flex items-center justify-center ${isOpen ? "hidden" : ""}`}
         aria-label="Open chat"
       >
-        <MessageCircle className="w-6 h-6" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background" />
+        <MessageCircle className="w-6 h-6" strokeWidth={1.5} />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-terracotta rounded-full border-2 border-background" />
       </motion.button>
 
       {/* Chat Sidebar */}
@@ -91,7 +90,7 @@ const ChatbotSidebar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-50 bg-background/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-foreground/20 backdrop-blur-sm md:hidden"
             />
 
             {/* Sidebar Panel */}
@@ -100,16 +99,16 @@ const ChatbotSidebar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 z-50 w-full sm:w-96 bg-card border-l border-border shadow-2xl flex flex-col"
+              className="fixed right-0 top-0 bottom-0 z-40 w-full sm:w-96 bg-card border-l border-border shadow-xl flex flex-col"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-border">
+              <div className="flex items-center justify-between p-5 border-b border-border">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Bot className="w-5 h-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-sage/20 flex items-center justify-center">
+                    <Bot className="w-5 h-5 text-sage" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">{t("chat.title")}</h3>
+                    <h3 className="font-serif font-semibold text-foreground">{t("chat.title")}</h3>
                     <p className="text-xs text-muted-foreground">{t("chat.subtitle")}</p>
                   </div>
                 </div>
@@ -117,39 +116,40 @@ const ChatbotSidebar = () => {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsOpen(false)}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground rounded-full"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" strokeWidth={1.5} />
                 </Button>
               </div>
 
               {/* Messages */}
-              <ScrollArea className="flex-1 p-4">
+              <ScrollArea className="flex-1 p-5">
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <motion.div
                       key={message.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                       className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
                     >
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           message.role === "user"
-                            ? "bg-primary/20"
+                            ? "bg-sage/20"
                             : "bg-secondary"
                         }`}
                       >
                         {message.role === "user" ? (
-                          <User className="w-4 h-4 text-primary" />
+                          <User className="w-4 h-4 text-sage" strokeWidth={1.5} />
                         ) : (
-                          <Bot className="w-4 h-4 text-muted-foreground" />
+                          <Bot className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
                         )}
                       </div>
                       <div
-                        className={`max-w-[80%] p-3 rounded-2xl text-sm ${
+                        className={`max-w-[80%] p-4 rounded-2xl text-sm ${
                           message.role === "user"
-                            ? "bg-primary text-primary-foreground rounded-tr-sm"
+                            ? "bg-forest text-white rounded-tr-sm"
                             : "bg-secondary text-foreground rounded-tl-sm"
                         }`}
                       >
@@ -165,9 +165,9 @@ const ChatbotSidebar = () => {
                       className="flex gap-3"
                     >
                       <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                        <Bot className="w-4 h-4 text-muted-foreground" />
+                        <Bot className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
                       </div>
-                      <div className="bg-secondary p-3 rounded-2xl rounded-tl-sm">
+                      <div className="bg-secondary p-4 rounded-2xl rounded-tl-sm">
                         <div className="thinking-dots flex gap-1">
                           <span className="w-2 h-2 rounded-full bg-muted-foreground" />
                           <span className="w-2 h-2 rounded-full bg-muted-foreground" />
@@ -180,22 +180,21 @@ const ChatbotSidebar = () => {
               </ScrollArea>
 
               {/* Input */}
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2">
+              <div className="p-5 border-t border-border">
+                <div className="flex gap-3">
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={t("chat.placeholder")}
-                    className="flex-1"
+                    className="flex-1 rounded-full border-border bg-secondary/30 h-12"
                   />
                   <Button
                     onClick={handleSend}
                     disabled={!input.trim() || isTyping}
-                    variant="intelligence"
-                    size="icon"
+                    className="bg-forest hover:bg-forest/90 text-white rounded-full h-12 w-12 p-0"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="w-4 h-4" strokeWidth={1.5} />
                   </Button>
                 </div>
               </div>

@@ -10,13 +10,11 @@ const SplineScene = ({ className = "" }: SplineSceneProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load Spline viewer script dynamically
     const script = document.createElement("script");
     script.type = "module";
     script.src = "https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js";
     
     script.onload = () => {
-      // Give the viewer time to initialize
       setTimeout(() => setIsLoading(false), 1500);
     };
     
@@ -45,30 +43,28 @@ const SplineScene = ({ className = "" }: SplineSceneProps) => {
             className="absolute inset-0 z-20 flex items-center justify-center bg-background"
           >
             <div className="flex flex-col items-center gap-6">
-              {/* Animated logo/orb */}
               <motion.div
                 animate={{
-                  scale: [1, 1.2, 1],
+                  scale: [1, 1.1, 1],
                   opacity: [0.5, 1, 0.5],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
                 className="relative"
               >
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/50 blur-sm" />
-                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-primary via-primary/80 to-transparent" />
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-sage to-sage/50 blur-sm" />
+                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-sage via-sage/80 to-transparent" />
               </motion.div>
               
-              {/* Loading text with dots */}
               <div className="flex items-center gap-1 text-muted-foreground text-sm font-medium">
-                <span>Loading experience</span>
+                <span className="font-serif italic">Loading experience</span>
                 <span className="thinking-dots flex gap-1 ml-1">
-                  <span className="w-1 h-1 rounded-full bg-primary" />
-                  <span className="w-1 h-1 rounded-full bg-primary" />
-                  <span className="w-1 h-1 rounded-full bg-primary" />
+                  <span className="w-1 h-1 rounded-full bg-sage" />
+                  <span className="w-1 h-1 rounded-full bg-sage" />
+                  <span className="w-1 h-1 rounded-full bg-sage" />
                 </span>
               </div>
             </div>
@@ -76,9 +72,9 @@ const SplineScene = ({ className = "" }: SplineSceneProps) => {
         )}
       </AnimatePresence>
 
-      {/* Spline 3D scene as ambient background */}
+      {/* Spline 3D scene - New URL */}
       <spline-viewer
-        url="https://prod.spline.design/DnEGNNUDHHw0Ga5l/scene.splinecode"
+        url="https://prod.spline.design/USSssSA4oj9qAUAz/scene.splinecode"
         style={{
           width: "100%",
           height: "100%",
@@ -94,17 +90,10 @@ const SplineScene = ({ className = "" }: SplineSceneProps) => {
           display: none !important;
         }
       `}</style>
-      
-      {/* Light gradient overlay for text readability on light theme */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background pointer-events-none" />
-      
-      {/* Subtle glow from top */}
-      <div className="absolute inset-0 hero-gradient opacity-50 pointer-events-none" />
     </div>
   );
 };
 
-// Extend JSX for spline-viewer custom element
 declare global {
   namespace JSX {
     interface IntrinsicElements {

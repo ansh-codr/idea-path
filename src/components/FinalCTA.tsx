@@ -42,63 +42,64 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
   ];
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
-      </div>
-      
+    <section className="py-24 md:py-32 relative overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="container mx-auto px-6 relative z-10"
       >
         <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success/10 border border-success/20 mb-6">
-            <Check className="w-4 h-4 text-success" />
-            <span className="text-sm text-success">{t("cta.complete")}</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sage/10 border border-sage/20 mb-6">
+            <Check className="w-4 h-4 text-sage" strokeWidth={1.5} />
+            <span className="text-sm text-sage font-medium">{t("cta.complete")}</span>
           </div>
 
-          <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4 text-foreground">
-            {t("cta.title")}
+          <h2 className="font-serif text-4xl sm:text-5xl font-semibold mb-4 text-foreground">
+            Ready for the <span className="italic">next step?</span>
           </h2>
           
-          <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+          <p className="text-muted-foreground mb-10 max-w-lg mx-auto text-lg">
             {t("cta.subtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button 
-              variant="default" 
-              size="lg" 
               onClick={handlePrint}
-              className="bg-primary text-primary-foreground"
+              className="bg-forest hover:bg-forest/90 text-white rounded-full uppercase tracking-widest text-sm font-medium px-8 py-6 transition-all duration-300 hover:-translate-y-0.5"
             >
-              <Download className="w-4 h-4 mr-2" />
-              Download as PDF
+              <Download className="w-4 h-4 mr-2" strokeWidth={1.5} />
+              Download PDF
             </Button>
             
-            <Button variant="outline" size="lg" onClick={handleShare}>
-              <Share2 className="w-4 h-4 mr-2" />
+            <Button 
+              variant="outline" 
+              onClick={handleShare}
+              className="rounded-full border-sage text-sage hover:bg-sage/10 uppercase tracking-widest text-sm font-medium px-8 py-6 transition-all duration-300"
+            >
+              <Share2 className="w-4 h-4 mr-2" strokeWidth={1.5} />
               Share Results
             </Button>
             
-            <Button variant="ghost" size="lg" onClick={onRestart}>
-              <RefreshCw className="w-4 h-4 mr-2" />
+            <Button 
+              variant="ghost" 
+              onClick={onRestart}
+              className="rounded-full text-muted-foreground hover:text-foreground uppercase tracking-widest text-sm font-medium px-8 py-6 transition-all duration-300"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" strokeWidth={1.5} />
               {t("cta.restart")}
             </Button>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-border">
-            <p className="text-sm text-muted-foreground mb-4">
+          <div className="mt-16 pt-8 border-t border-border">
+            <p className="text-sm text-muted-foreground mb-6 uppercase tracking-wide">
               {t("cta.features.title")}
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
               {features.map((feature) => (
                 <div key={feature} className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-primary" />
+                  <span className="w-2 h-2 rounded-full bg-sage" />
                   <span>{feature}</span>
                 </div>
               ))}

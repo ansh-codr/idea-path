@@ -1,84 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* IdeaForge Design System
-   Clean, warm, friendly aesthetic
-   Colors in HSL for theming flexibility
+   Botanical / Organic Serif
+   Warm, tactile, nature-inspired
 */
 
 @layer base {
   :root {
-    /* Core backgrounds - Warm cream */
-    --background: 40 33% 96%;
-    --foreground: 200 15% 15%;
+    /* Core backgrounds - Warm Alabaster */
+    --background: 43 33% 97%;
+    --foreground: 150 15% 20%;
 
     /* Card surfaces - Clean white */
     --card: 0 0% 100%;
-    --card-foreground: 200 15% 15%;
+    --card-foreground: 150 15% 20%;
 
     /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 200 15% 15%;
+    --popover-foreground: 150 15% 20%;
 
-    /* Primary - Teal Green (Trust & Growth) */
-    --primary: 160 52% 36%;
+    /* Primary - Sage Green */
+    --primary: 100 12% 56%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Light warm surfaces */
-    --secondary: 40 20% 92%;
-    --secondary-foreground: 200 15% 25%;
+    /* Secondary - Soft Clay */
+    --secondary: 30 25% 90%;
+    --secondary-foreground: 150 15% 25%;
 
-    /* Muted - Subdued elements */
-    --muted: 40 15% 88%;
-    --muted-foreground: 200 10% 45%;
+    /* Muted */
+    --muted: 40 20% 92%;
+    --muted-foreground: 150 10% 40%;
 
-    /* Accent - Warm orange for highlights */
-    --accent: 30 85% 55%;
+    /* Accent - Terracotta */
+    --accent: 15 50% 58%;
     --accent-foreground: 0 0% 100%;
 
-    /* Trust indicators - Teal */
-    --success: 160 52% 40%;
+    /* Success - Sage */
+    --success: 100 12% 50%;
     --success-foreground: 0 0% 100%;
 
-    /* Caution - Soft amber */
-    --warning: 38 92% 50%;
-    --warning-foreground: 200 15% 15%;
+    /* Warning */
+    --warning: 30 85% 55%;
+    --warning-foreground: 150 15% 20%;
 
-    /* Destructive - Muted coral */
-    --destructive: 0 62% 55%;
+    /* Destructive */
+    --destructive: 0 50% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
-    --border: 40 15% 85%;
-    --input: 40 15% 90%;
-    --ring: 160 52% 36%;
+    /* Borders - Stone */
+    --border: 40 15% 88%;
+    --input: 40 15% 92%;
+    --ring: 100 12% 56%;
 
-    --radius: 0.75rem;
+    --radius: 1.5rem;
 
-    /* Custom gradients */
-    --gradient-intelligence: linear-gradient(135deg, hsl(160 52% 36%) 0%, hsl(160 52% 45%) 100%);
-    --gradient-trust: linear-gradient(135deg, hsl(160 52% 40%) 0%, hsl(170 50% 45%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(30 85% 55%) 0%, hsl(25 90% 60%) 100%);
-    --gradient-surface: linear-gradient(180deg, hsl(40 33% 96%) 0%, hsl(40 25% 94%) 100%);
-    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(160 52% 36% / 0.08) 0%, transparent 60%);
+    /* Shadows - Soft, diffused */
+    --shadow-sm: 0 4px 6px -1px rgba(45, 58, 49, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(45, 58, 49, 0.05);
+    --shadow-lg: 0 20px 40px -10px rgba(45, 58, 49, 0.05);
+    --shadow-xl: 0 25px 50px -12px rgba(45, 58, 49, 0.15);
 
-    /* Shadows - Softer for light theme */
-    --shadow-glow: 0 0 40px -10px hsl(160 52% 36% / 0.2);
-    --shadow-card: 0 2px 12px -2px hsl(200 15% 15% / 0.08);
-    --shadow-elevated: 0 8px 30px -6px hsl(200 15% 15% / 0.12);
-
-    /* Sidebar - matching theme */
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 200 15% 25%;
-    --sidebar-primary: 160 52% 36%;
+    --sidebar-foreground: 150 15% 25%;
+    --sidebar-primary: 100 12% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 20% 95%;
-    --sidebar-accent-foreground: 200 15% 15%;
+    --sidebar-accent: 30 25% 94%;
+    --sidebar-accent-foreground: 150 15% 20%;
     --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 160 52% 36%;
+    --sidebar-ring: 100 12% 56%;
   }
 }
 
@@ -93,61 +87,36 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', system-ui, sans-serif;
+    font-family: 'Playfair Display', Georgia, serif;
   }
 }
 
 @layer components {
-  /* Hero gradient overlay */
-  .hero-gradient {
-    background: var(--gradient-hero);
+  /* Paper grain texture - CRITICAL for botanical feel */
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
 
-  /* Intelligence glow effect */
-  .glow-intelligence {
-    box-shadow: var(--shadow-glow);
-  }
-
-  /* Glass morphism for cards */
+  /* Glass surface for cards */
   .glass-surface {
     background: hsl(var(--card));
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-md);
     border: 1px solid hsl(var(--border));
   }
 
-  /* Text gradient */
-  .text-gradient-intelligence {
-    background: var(--gradient-intelligence);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Section divider */
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, hsl(var(--border)) 50%, transparent 100%);
-  }
-
-  /* Input focus ring */
-  .input-focus-ring {
-    @apply ring-2 ring-primary/30 ring-offset-2 ring-offset-background;
-  }
-
-  /* Trust meter base */
-  .trust-meter {
-    background: hsl(var(--muted));
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  /* Feature badge */
+  /* Feature badge - pill shaped */
   .feature-badge {
-    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border text-sm text-muted-foreground;
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border text-sm text-muted-foreground transition-all duration-300 hover:-translate-y-0.5;
+  }
+
+  /* Botanical button */
+  .btn-botanical {
+    @apply rounded-full uppercase tracking-widest text-sm font-medium px-8 py-3 transition-all duration-300;
   }
 
   /* Animated thinking dots */
@@ -157,6 +126,19 @@
   .thinking-dots span:nth-child(1) { animation-delay: 0s; }
   .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
   .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  /* Trust meter */
+  .trust-meter {
+    background: hsl(var(--muted));
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  /* Italic emphasis for Playfair */
+  .italic-emphasis {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+  }
 }
 
 @layer utilities {
@@ -182,16 +164,6 @@
   }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -203,13 +175,7 @@
   }
 }
 
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
