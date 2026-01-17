@@ -2,8 +2,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Sparkles } from "lucide-react";
 import SplineScene from "./SplineScene";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
   const scrollToGenerator = () => {
     const generatorSection = document.getElementById("generator");
     if (generatorSection) {
@@ -38,7 +41,7 @@ const HeroSection = () => {
           >
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm text-muted-foreground">
-              AI-Powered Business Guidance
+              {t("hero.badge")}
             </span>
           </motion.div>
 
@@ -49,8 +52,8 @@ const HeroSection = () => {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           >
-            Turn your skills into a{" "}
-            <span className="text-gradient-intelligence">real business path</span>
+            {t("hero.headline")}{" "}
+            <span className="text-gradient-intelligence">{t("hero.headline.highlight")}</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -60,8 +63,7 @@ const HeroSection = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
-            Guided by AI. Built for first-time founders. Transform your unique
-            background into actionable startup ideas with confidence.
+            {t("hero.subheadline")}
           </motion.p>
 
           {/* CTA Button */}
@@ -76,7 +78,7 @@ const HeroSection = () => {
               onClick={scrollToGenerator}
               className="group"
             >
-              Start Building
+              {t("hero.cta")}
               <ArrowDown className="w-5 h-5 transition-transform group-hover:translate-y-1" />
             </Button>
           </motion.div>
@@ -88,7 +90,7 @@ const HeroSection = () => {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="mt-8 text-sm text-muted-foreground/70"
           >
-            No credit card required • Free to explore • Private & secure
+            {t("hero.trust")}
           </motion.p>
         </motion.div>
       </div>
