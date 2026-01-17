@@ -1,3 +1,10 @@
+/**
+ * IdeaForge Index Page
+ * ====================
+ * Main page using REAL AI generation from backend.
+ * NO MOCK DATA - connects to actual IdeaForge API.
+ */
+
 import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import GeneratorSection from "@/components/GeneratorSection";
@@ -7,89 +14,83 @@ import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "@/components/ui/use-toast";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
 
-// Simulated AI response
-const generateMockResults = (formData: any): AIResults => {
-  return {
-    businessIdea: {
-      title: "Community Skill-Share Platform",
-      description:
-        "A hyperlocal platform connecting skilled individuals with learners in your area. Members can teach cooking classes, offer tutoring, share crafting skills, or provide professional consulting—all within their community.",
-      whyItFits:
-        "Your teaching ability combined with your interest in community building and local focus makes this a natural fit. The low startup cost aligns with your budget.",
-    },
-    feasibilityScores: [
-      {
-        label: "Market Demand",
-        value: 82,
-        icon: <TrendingUp className="w-4 h-4" strokeWidth={1.5} />,
-        description: "High interest in local learning experiences",
-      },
-      {
-        label: "Ease of Execution",
-        value: 68,
-        icon: <Zap className="w-4 h-4" strokeWidth={1.5} />,
-        description: "Moderate technical requirements",
-      },
-      {
-        label: "Capital Efficiency",
-        value: 91,
-        icon: <DollarSign className="w-4 h-4" strokeWidth={1.5} />,
-        description: "Can launch with minimal investment",
-      },
-      {
-        label: "Risk Level",
-        value: 74,
-        icon: <Shield className="w-4 h-4" strokeWidth={1.5} />,
-        description: "Manageable risks with proper planning",
-      },
-    ],
-    roadmap: [
-      {
-        phase: "Phase 1",
-        title: "Validate & Research",
-        description: "Survey 50 potential users. Identify top skills in demand.",
-        timeframe: "Week 1-2",
-      },
-      {
-        phase: "Phase 2",
-        title: "MVP Launch",
-        description: "Create simple booking system. Onboard 10 skill providers.",
-        timeframe: "Week 3-6",
-      },
-      {
-        phase: "Phase 3",
-        title: "First Revenue",
-        description: "Host 25+ sessions. Collect feedback. Introduce platform fee.",
-        timeframe: "Month 2-3",
-      },
-      {
-        phase: "Phase 4",
-        title: "Scale & Iterate",
-        description: "Expand to adjacent areas. Add premium features.",
-        timeframe: "Month 4-6",
-      },
-    ],
-    pitchSummary:
-      "We help communities unlock hidden talent by connecting local experts with curious learners—making knowledge sharing accessible and authentically local.",
-  };
+// API Base URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
+
+// Icon mapping for feasibility scores
+const iconMap: Record<string, React.ReactNode> = {
+  market: <TrendingUp className="w-4 h-4" strokeWidth={1.5} />,
+  execution: <Zap className="w-4 h-4" strokeWidth={1.5} />,
+  capital: <DollarSign className="w-4 h-4" strokeWidth={1.5} />,
+  risk: <Shield className="w-4 h-4" strokeWidth={1.5} />,
 };
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<AIResults | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const handleGenerate = async (formData: any) => {
     setIsGenerating(true);
     setResults(null);
 
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+    try {
+      // Call the REAL IdeaForge API
+      const response = await fetch(`${API_BASE_URL}/generate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          language,
+          sessionId: sessionId || undefined,
+        }),
+      });
 
-    const generatedResults = generateMockResults(formData);
-    setResults(generatedResults);
-    setIsGenerating(false);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Store session ID for future interactions
+      if (data.sessionId) {
+        setSessionId(data.sessionId);
+      }
+
+      // Transform API response to match ResultsSection format
+      const transformedResults: AIResults = {
+        businessIdea: data.results.businessIdea,
+        feasibilityScores: data.results.feasibilityScores.map((score: any) => ({
+          ...score,
+          icon: iconMap[score.iconKey] || iconMap.market,
+        })),
+        roadmap: data.results.roadmap,
+        pitchSummary: data.results.pitchSummary,
+      };
+
+      setResults(transformedResults);
+
+      toast({
+        title: "Ideas Generated!",
+        description: "Your personalized business guidance is ready.",
+      });
+    } catch (error) {
+      console.error("Generation error:", error);
+      toast({
+        title: "Generation failed",
+        description: error instanceof Error ? error.message : "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
 
     setTimeout(() => {
       const resultsSection = document.getElementById("results");
