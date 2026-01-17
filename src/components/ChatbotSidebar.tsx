@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { toast } from "@/components/ui/use-toast";
 
 interface Message {
   id: string;
@@ -38,24 +39,40 @@ const ChatbotSidebar = () => {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      const responses = [
-        "That's a great question! Based on your interests, I'd suggest starting with market research in your local area.",
-        "Many successful entrepreneurs started exactly where you are. The key is to validate your idea with real potential customers.",
-        "Consider starting small with a minimal viable product (MVP) to test your concept before investing heavily.",
-        "Your skills could translate well into several business models. Would you like me to explore some options?",
-        "Location-based businesses often have an advantage in rural areas due to less competition.",
-      ];
-      
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: userMessage.content,
+          history: messages.map(({ role, content }) => ({ role, content })),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody?.error || "Failed to get reply.");
+      }
+
+      const data = await response.json();
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: data?.reply || "Sorry, I couldn't generate a response.",
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      toast({
+        title: "Chat failed",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

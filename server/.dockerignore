@@ -1,0 +1,8 @@
+# Fly.io ignores these files during deployment
+node_modules
+.env
+.env.local
+*.log
+.git
+.gitignore
+README.md

@@ -1,0 +1,51 @@
+# Netlify Configuration for IdeaForge
+# ====================================
+
+[build]
+  # Build command
+  command = "npm run build"
+  
+  # Directory to publish (Vite outputs to dist)
+  publish = "dist"
+  
+  # Base directory (if project is in a subdirectory)
+  # base = "idea-path"
+
+[build.environment]
+  # Node version
+  NODE_VERSION = "20"
+
+# SPA Fallback - redirect all routes to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# API Proxy - redirect /api calls to your Render backend
+# Update this URL after deploying to Render
+[[redirects]]
+  from = "/api/*"
+  to = "https://ideaforge-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Don't cache HTML
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"

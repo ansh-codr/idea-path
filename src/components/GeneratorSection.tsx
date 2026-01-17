@@ -60,7 +60,7 @@ const GeneratorSection = ({ onGenerate, isGenerating }: GeneratorSectionProps) =
           className="text-center mb-16"
         >
           <h2 className="font-serif text-4xl sm:text-5xl font-semibold mb-4 text-foreground">
-            Tell us about <span className="italic">yourself</span>
+            {t("generator.title")}
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-lg">
             {t("generator.subtitle")}

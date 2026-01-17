@@ -5,6 +5,7 @@ import { ResultsSection, AIResults } from "@/components/ResultsSection";
 import FinalCTA from "@/components/FinalCTA";
 import ChatbotSidebar from "@/components/ChatbotSidebar";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Header from "@/components/Header";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
 
@@ -117,6 +118,9 @@ const Index = () => {
         }}
       />
 
+      {/* Header with logo */}
+      <Header />
+      
       {/* Language Switcher - Fixed position */}
       <div className="fixed top-4 right-4 z-40">
         <LanguageSwitcher />

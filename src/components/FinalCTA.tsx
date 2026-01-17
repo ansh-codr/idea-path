@@ -57,7 +57,7 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
           </div>
 
           <h2 className="font-serif text-4xl sm:text-5xl font-semibold mb-4 text-foreground">
-            Ready for the <span className="italic">next step?</span>
+            {t("cta.title")}
           </h2>
           
           <p className="text-muted-foreground mb-10 max-w-lg mx-auto text-lg">
@@ -70,7 +70,7 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
               className="bg-forest hover:bg-forest/90 text-white rounded-full uppercase tracking-widest text-sm font-medium px-8 py-6 transition-all duration-300 hover:-translate-y-0.5"
             >
               <Download className="w-4 h-4 mr-2" strokeWidth={1.5} />
-              Download PDF
+              {t("cta.save")}
             </Button>
             
             <Button 
@@ -79,7 +79,7 @@ const FinalCTA = ({ hasResults, onRestart }: FinalCTAProps) => {
               className="rounded-full border-sage text-sage hover:bg-sage/10 uppercase tracking-widest text-sm font-medium px-8 py-6 transition-all duration-300"
             >
               <Share2 className="w-4 h-4 mr-2" strokeWidth={1.5} />
-              Share Results
+              {t("cta.share")}
             </Button>
             
             <Button 

@@ -1,0 +1,36 @@
+# IdeaForge - Netlify Environment Variables
+# ==========================================
+# Copy these to Netlify Dashboard > Site Settings > Environment Variables
+
+# ============================================
+# REQUIRED - Firebase (Frontend Auth)
+# ============================================
+VITE_FIREBASE_API_KEY=AIzaSyDwd6uJaq-rfIx0R6U9mcshvqZz6C0KmEY
+VITE_FIREBASE_AUTH_DOMAIN=ideaforge-691f9.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=ideaforge-691f9
+VITE_FIREBASE_STORAGE_BUCKET=ideaforge-691f9.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=97905567752
+VITE_FIREBASE_APP_ID=1:97905567752:web:862924d7c281f5e8cb89bd
+VITE_FIREBASE_MEASUREMENT_ID=G-2K4B2Y20XK
+
+# ============================================
+# OPTIONAL - API URL (if backend is external)
+# ============================================
+# Leave empty to use /api proxy (configured in netlify.toml)
+# Or set to your backend URL if deployed separately
+VITE_API_URL=
+
+# ============================================
+# NOTE: Backend Environment Variables
+# ============================================
+# If you deploy the backend separately (e.g., Render, Railway, Heroku),
+# you'll need these environment variables on THAT platform:
+#
+# PORT=5001
+# NODE_ENV=production
+# CORS_ORIGIN=https://your-netlify-site.netlify.app
+# OPENAI_API_KEY=your_openai_api_key
+# PRIMARY_AI_PROVIDER=openai
+# PRIMARY_AI_MODEL=gpt-4o-mini
+# SECONDARY_AI_PROVIDER=openai
+# SECONDARY_AI_MODEL=gpt-4o

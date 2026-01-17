@@ -1,0 +1,30 @@
+# Render.com Configuration for IdeaForge Backend
+# ================================================
+# This file tells Render how to build and run the app
+
+services:
+  - type: web
+    name: ideaforge-backend
+    env: node
+    region: singapore  # Closest to India
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        sync: false  # Set this manually in Render dashboard
+      - key: OPENAI_API_KEY
+        sync: false  # Set this manually in Render dashboard (secret)
+      - key: PRIMARY_AI_PROVIDER
+        value: openai
+      - key: PRIMARY_AI_MODEL
+        value: gpt-4o-mini
+      - key: SECONDARY_AI_PROVIDER
+        value: openai
+      - key: SECONDARY_AI_MODEL
+        value: gpt-4o

@@ -71,3 +71,32 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Backend (Decision-Support AI API)
+
+This project includes a lightweight Express backend for GPT and Claude.
+
+1. Install backend dependencies:
+
+```sh
+cd server
+npm install
+```
+
+2. Configure environment variables:
+
+```sh
+cp .env.example .env
+```
+
+3. Start the backend server:
+
+```sh
+npm run dev
+```
+
+The frontend proxies API calls to http://localhost:5001 via the /api path.
+
+Endpoints:
+- POST /api/generate — structured decision-support output (ideas, roadmap, feasibility, pros/cons, and explainability)
+- POST /api/feedback — simple feedback loop for thumbs up/down
