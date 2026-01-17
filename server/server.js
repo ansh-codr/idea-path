@@ -100,8 +100,15 @@ app.get("/api/health", (req, res) => {
     version: "1.0.0",
     timestamp: new Date().toISOString(),
     ai: {
+      primaryProvider: aiStatus.primaryProvider,
       primaryAvailable: aiStatus.primaryAvailable,
+      fallbackAvailable: aiStatus.fallbackAvailable,
       secondaryAvailable: aiStatus.secondaryAvailable,
+      providers: {
+        gemini: aiStatus.gemini,
+        openai: aiStatus.openai,
+        anthropic: aiStatus.anthropic,
+      },
     },
     storage: storageStats,
   });
@@ -116,8 +123,8 @@ app.get("/api/health", (req, res) => {
  * Main idea generation pipeline:
  * 1. Validation & Normalization
  * 2. Context Building
- * 3. LLaMA-4 Scout (idea generation)
- * 4. GPT-5.2 (structuring & safety)
+ * 3. Gemini (primary) / OpenAI (fallback) for idea generation
+ * 4. OpenAI (structuring & safety)
  * 5. Feasibility & Simulation
  * 6. Response Formatting
  * 

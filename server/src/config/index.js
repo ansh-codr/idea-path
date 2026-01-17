@@ -21,25 +21,32 @@ export const config = {
       .filter(Boolean),
   },
 
-  // AI Model Configuration (Dual-Model Strategy)
+  // AI Model Configuration (Dual-Model Strategy with Gemini Priority)
   ai: {
-    // Primary: LLaMA-4 Scout (domain-trained for idea generation)
-    // In demo: Using OpenAI as proxy for LLaMA-4 Scout behavior
+    // Primary: Gemini (Google) - First priority for idea generation
+    // Falls back to OpenAI if Gemini fails
     primary: {
-      provider: (process.env.PRIMARY_AI_PROVIDER || "openai").toLowerCase(),
-      model: process.env.PRIMARY_AI_MODEL || "gpt-4o-mini",
+      provider: (process.env.PRIMARY_AI_PROVIDER || "gemini").toLowerCase(),
+      model: process.env.PRIMARY_AI_MODEL || "gemini-2.0-flash",
       temperature: 0.7, // Higher creativity for idea generation
       maxTokens: 2000,
       role: "IDEA_GENERATION", // Generates domain ideas and raw reasoning
     },
-    // Secondary: GPT-5.2 (reasoning refinement, structuring, safety)
+    // Secondary: OpenAI (fallback and structuring)
     // NEVER generates ideas from scratch
     secondary: {
       provider: (process.env.SECONDARY_AI_PROVIDER || "openai").toLowerCase(),
-      model: process.env.SECONDARY_AI_MODEL || "gpt-4o",
+      model: process.env.SECONDARY_AI_MODEL || "gpt-4o-mini",
       temperature: 0.3, // Lower for structured, consistent outputs
       maxTokens: 1500,
       role: "STRUCTURING_SAFETY", // Only structures, refines, enforces safety
+    },
+    // Fallback provider when primary fails
+    fallback: {
+      provider: "openai",
+      model: "gpt-4o-mini",
+      temperature: 0.7,
+      maxTokens: 2000,
     },
   },
 

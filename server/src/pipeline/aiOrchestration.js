@@ -5,9 +5,9 @@
  * 
  * Responsibility:
  * - Orchestrate dual-model AI strategy
- * - LLaMA-4 Scout: Generate ideas (primary)
- * - GPT-5.2: Structure and refine (secondary)
- * - Handle model failures gracefully
+ * - Gemini (Primary): Generate ideas - FIRST PRIORITY
+ * - OpenAI (Fallback): If Gemini fails
+ * - Handle model failures gracefully with automatic fallback
  * 
  * Reskill Alignment:
  * - Domain-trained ideation for underserved users
@@ -17,6 +17,7 @@
 
 import OpenAI from "openai";
 import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import config from "../config/index.js";
 
 // Initialize AI clients
@@ -26,6 +27,11 @@ const openai = process.env.OPENAI_API_KEY
 
 const anthropic = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  : null;
+
+// Initialize Gemini (PRIMARY - First Priority)
+const gemini = process.env.GEMINI_API_KEY
+  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
   : null;
 
 /**
@@ -40,7 +46,40 @@ const stripToJson = (text) => {
 };
 
 /**
- * Call OpenAI API
+ * Call Gemini API (PRIMARY - First Priority)
+ */
+const callGemini = async ({ system, user, model, temperature, maxTokens }) => {
+  if (!gemini) {
+    throw new Error("Gemini client not initialized. Check GEMINI_API_KEY.");
+  }
+  
+  const generativeModel = gemini.getGenerativeModel({ 
+    model: model || "gemini-2.0-flash",
+    generationConfig: {
+      temperature: temperature ?? 0.7,
+      maxOutputTokens: maxTokens || 2000,
+    },
+  });
+  
+  // Combine system and user prompts for Gemini
+  const fullPrompt = `${system}\n\n---\n\nUser Request:\n${user}`;
+  
+  const result = await generativeModel.generateContent(fullPrompt);
+  const response = await result.response;
+  const content = response.text();
+  
+  return {
+    content,
+    usage: {
+      prompt_tokens: 0, // Gemini doesn't provide exact token counts the same way
+      completion_tokens: 0,
+    },
+    model: model || "gemini-2.0-flash",
+  };
+};
+
+/**
+ * Call OpenAI API (FALLBACK when Gemini fails)
  */
 const callOpenAI = async ({ system, user, model, temperature, maxTokens }) => {
   if (!openai) {
@@ -48,9 +87,9 @@ const callOpenAI = async ({ system, user, model, temperature, maxTokens }) => {
   }
   
   const response = await openai.chat.completions.create({
-    model: model || config.ai.primary.model,
-    temperature: temperature ?? config.ai.primary.temperature,
-    max_tokens: maxTokens || config.ai.primary.maxTokens,
+    model: model || config.ai.fallback.model,
+    temperature: temperature ?? config.ai.fallback.temperature,
+    max_tokens: maxTokens || config.ai.fallback.maxTokens,
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },
@@ -88,29 +127,61 @@ const callAnthropic = async ({ system, user, model, temperature, maxTokens }) =>
 };
 
 /**
- * Generic AI call dispatcher
+ * Generic AI call dispatcher with automatic fallback
  */
 const callAI = async ({ provider, system, user, model, temperature, maxTokens }) => {
   const startTime = Date.now();
   
   let result;
-  if (provider === "anthropic") {
-    result = await callAnthropic({ system, user, model, temperature, maxTokens });
-  } else {
-    result = await callOpenAI({ system, user, model, temperature, maxTokens });
+  let usedProvider = provider;
+  let usedFallback = false;
+  
+  // Try primary provider first
+  try {
+    if (provider === "gemini") {
+      result = await callGemini({ system, user, model, temperature, maxTokens });
+    } else if (provider === "anthropic") {
+      result = await callAnthropic({ system, user, model, temperature, maxTokens });
+    } else {
+      result = await callOpenAI({ system, user, model, temperature, maxTokens });
+    }
+  } catch (primaryError) {
+    console.warn(`[IdeaForge] Primary provider (${provider}) failed: ${primaryError.message}`);
+    console.log(`[IdeaForge] Falling back to OpenAI...`);
+    
+    // Fallback to OpenAI if primary fails
+    if (provider !== "openai" && openai) {
+      try {
+        result = await callOpenAI({ 
+          system, 
+          user, 
+          model: config.ai.fallback.model, 
+          temperature, 
+          maxTokens 
+        });
+        usedProvider = "openai (fallback)";
+        usedFallback = true;
+      } catch (fallbackError) {
+        console.error(`[IdeaForge] Fallback also failed: ${fallbackError.message}`);
+        throw new Error(`Both primary (${provider}) and fallback (OpenAI) failed`);
+      }
+    } else {
+      throw primaryError;
+    }
   }
   
   return {
     ...result,
     processingTimeMs: Date.now() - startTime,
-    provider,
+    provider: usedProvider,
+    usedFallback,
   };
 };
 
 /**
- * Primary Model: LLaMA-4 Scout (Idea Generation)
- * =============================================
- * In demo/production: Uses configured model as proxy
+ * Primary Model: Gemini (Idea Generation) - FIRST PRIORITY
+ * =========================================================
+ * Falls back to OpenAI if Gemini fails
  * 
  * Role:
  * - Generate 3-5 business ideas
@@ -125,7 +196,7 @@ const callAI = async ({ provider, system, user, model, temperature, maxTokens })
 export const callPrimaryModel = async ({ systemPrompt, userPrompt }) => {
   const { primary } = config.ai;
   
-  console.log(`[IdeaForge] Calling primary model (${primary.model}) for idea generation...`);
+  console.log(`[IdeaForge] Calling primary model (${primary.provider}/${primary.model}) for idea generation...`);
   
   const result = await callAI({
     provider: primary.provider,
@@ -136,7 +207,11 @@ export const callPrimaryModel = async ({ systemPrompt, userPrompt }) => {
     maxTokens: primary.maxTokens,
   });
   
-  console.log(`[IdeaForge] Primary model completed in ${result.processingTimeMs}ms`);
+  if (result.usedFallback) {
+    console.log(`[IdeaForge] Primary model used FALLBACK (OpenAI) - completed in ${result.processingTimeMs}ms`);
+  } else {
+    console.log(`[IdeaForge] Primary model (${primary.provider}) completed in ${result.processingTimeMs}ms`);
+  }
   
   return result;
 };
@@ -285,10 +360,24 @@ export const orchestrateAIGeneration = async ({
  * Check if AI providers are available
  */
 export const checkAIAvailability = () => {
+  const primaryProvider = config.ai.primary.provider;
+  let primaryAvailable = false;
+  
+  if (primaryProvider === "gemini") {
+    primaryAvailable = !!gemini;
+  } else if (primaryProvider === "anthropic") {
+    primaryAvailable = !!anthropic;
+  } else {
+    primaryAvailable = !!openai;
+  }
+  
   return {
+    gemini: !!gemini,
     openai: !!openai,
     anthropic: !!anthropic,
-    primaryAvailable: config.ai.primary.provider === "openai" ? !!openai : !!anthropic,
+    primaryProvider,
+    primaryAvailable,
+    fallbackAvailable: !!openai,
     secondaryAvailable: config.ai.secondary.provider === "openai" ? !!openai : !!anthropic,
   };
 };
