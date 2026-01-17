@@ -3,6 +3,9 @@ import HeroSection from "@/components/HeroSection";
 import GeneratorSection from "@/components/GeneratorSection";
 import { ResultsSection, AIResults } from "@/components/ResultsSection";
 import FinalCTA from "@/components/FinalCTA";
+import ChatbotSidebar from "@/components/ChatbotSidebar";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, DollarSign, TrendingUp, Zap } from "lucide-react";
 
 // Simulated AI response - in production this would come from backend
@@ -73,6 +76,7 @@ const generateMockResults = (formData: any): AIResults => {
 };
 
 const Index = () => {
+  const { t } = useLanguage();
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<AIResults | null>(null);
 
@@ -107,18 +111,24 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       {/* Navigation - minimal */}
-      <nav className="fixed top-0 left-0 right-0 z-50 py-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 py-4 bg-background/50 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between">
             <div className="font-display text-xl font-bold text-foreground">
               Idea<span className="text-primary">Forge</span>
             </div>
-            <div className="text-sm text-muted-foreground hidden sm:block">
-              AI-Powered Business Guidance
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-muted-foreground hidden sm:block">
+                {t("nav.tagline")}
+              </div>
+              <LanguageSwitcher />
             </div>
           </div>
         </div>
       </nav>
+      
+      {/* Chatbot */}
+      <ChatbotSidebar />
 
       <HeroSection />
       <GeneratorSection onGenerate={handleGenerate} isGenerating={isGenerating} />
